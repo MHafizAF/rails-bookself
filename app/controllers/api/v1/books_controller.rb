@@ -2,8 +2,12 @@ class Api::V1::BooksController < ApplicationController
   before_action :set_book, only: %i[ update show destroy ]
 
   def index 
-    @books = Book.all 
-    response_ok(@books, 200)
+    @books = Book.page(params[:page].to_i)
+    render json: {
+      message: "success",
+      data: @books,
+      meta: pagination(@books)
+    }
   end  
 
   def create 
