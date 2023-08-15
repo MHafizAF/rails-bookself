@@ -1,6 +1,8 @@
 class Api::V1::WritersController < ApplicationController
   before_action :set_writer, only: %i[ update show destroy ]
 
+  rescue_from ActionController::UnpermittedParameters, with: :unpermitted_params_handler
+
   def index 
     @writers = Writer.all 
     response_ok(@writers, 200)
@@ -35,5 +37,12 @@ class Api::V1::WritersController < ApplicationController
   def set_writer 
     @writer = Writer.find_by(id: params[:id])
     response_error("writer not found", 404) if @writer.nil?
+  end
+
+  def unpermitted_params_handler 
+    render json: {
+      "Unpermitted Parameters Found": params.to_unsafe_h.except(:controller, :action,:id, :name).keys,
+      status: :unprocessable_entity
+    }, status: :unprocessable_entity
   end
 end

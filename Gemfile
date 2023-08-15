@@ -19,6 +19,8 @@ gem "dotenv-rails"
 
 gem "kaminari"
 
+gem "pry"
+
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
