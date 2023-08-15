@@ -1,4 +1,26 @@
 class ApplicationController < ActionController::API
+  SECRET = ENV["ACCESS_TOKEN_SECRET"]
+
+  def authentication 
+    decode_data = decode_user_data(request.headers["token"])
+    user_data   = decode_data[0]["user_id"] unless !decode_data
+    @user       = User.find(user_data.id)
+
+    render json: { message: "Invalid username or password" } unless @user
+  end
+
+  def encode_user_data(payload)
+    JWT.encode payload, SECRET, "HS256"
+  end
+
+  def decode_user_data(token)
+    begin 
+      JWT.decode token, SECRET, true, { algorithm: "HS256" }
+    rescue => errors 
+      render json: { message: errors }
+    end
+  end
+
   def response_ok data, status
     render json: { message: "success", data: data }, status: status
   end
