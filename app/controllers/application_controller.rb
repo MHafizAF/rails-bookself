@@ -6,7 +6,7 @@ class ApplicationController < ActionController::API
     user_data   = decode_data[0]["user_id"] unless !decode_data
     @user       = User.find(user_data.id)
 
-    render json: { message: "Invalid username or password" } unless @user
+    render json: { message: "You need to login to access" } unless @user
   end
 
   def encode_user_data(payload)
