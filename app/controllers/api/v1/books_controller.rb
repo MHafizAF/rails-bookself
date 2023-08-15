@@ -1,4 +1,5 @@
 class Api::V1::BooksController < ApplicationController
+  before_action :authenticate, except: %i[ index ]
   before_action :set_book, only: %i[ update show destroy ]
 
   def index 
@@ -18,7 +19,7 @@ class Api::V1::BooksController < ApplicationController
 
   def update 
     @book.update(book_params) ? response_ok(@book, 200) :
-                   response_error(@book.errors, 422)
+                                response_error(@book.errors, 422)
   end
 
   def show 

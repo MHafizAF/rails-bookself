@@ -1,23 +1,29 @@
 class ApplicationController < ActionController::API
-  SECRET = ENV["ACCESS_TOKEN_SECRET"]
+  ACCESS_TOKEN_SECRET  = ENV["ACCESS_TOKEN_SECRET"]
+  REFRESH_TOKEN_SECRET = ENV["REFRESH_TOKEN_SECRET"]
 
-  def authentication 
-    decode_data = decode_user_data(request.headers["token"])
+  def authenticate 
+    decode_data = decode_user_data(request.headers["Authorization"], ACCESS_TOKEN_SECRET)
     user_data   = decode_data[0]["user_id"] unless !decode_data
-    @user       = User.find(user_data.id)
+    @user       = User.find_by(id: user_data) 
 
-    render json: { message: "You need to login to access" } unless @user
+    return response_error("You need to sign in to continue", 401) unless @user
   end
 
-  def encode_user_data(payload)
-    JWT.encode payload, SECRET, "HS256"
+  def encode_user_data(payload, secret)
+    JWT.encode payload, secret, "HS256"
   end
 
-  def decode_user_data(token)
-    begin 
-      JWT.decode token, SECRET, true, { algorithm: "HS256" }
-    rescue => errors 
-      render json: { message: errors }
+  def decode_user_data(token_params, secret)
+    if token_params
+      split_token = token_params.split(" ")
+      token       = split_token[0] != "Bearer" ? split_token[0] : split_token[1] 
+      
+      begin 
+        JWT.decode token, secret, true, { algorithm: "HS256" }
+      rescue => errors 
+        puts errors
+      end
     end
   end
 
