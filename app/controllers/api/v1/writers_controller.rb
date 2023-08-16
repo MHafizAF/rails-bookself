@@ -11,12 +11,12 @@ class Api::V1::WritersController < ApplicationController
   def create 
     @writer = Writer.new(writer_params)
     @writer.save ? response_ok(@writer, 200) : 
-                 response_error(@writer.errors, 422)
+                   response_error(@writer.errors, 422)
   end
 
   def update 
     @writer.update(writer_params) ? response_ok(@writer, 200) :
-                   response_error(@writer.errors, 422)
+                                    response_error(@writer.errors, 422)
   end
 
   def show 
@@ -42,7 +42,7 @@ class Api::V1::WritersController < ApplicationController
   def unpermitted_params_handler 
     render json: {
       "Unpermitted Parameters Found": params.to_unsafe_h.except(:controller, :action,:id, :name).keys,
-      status: :unprocessable_entity
-    }, status: :unprocessable_entity
+      status: 422
+    }, status: 422
   end
 end
