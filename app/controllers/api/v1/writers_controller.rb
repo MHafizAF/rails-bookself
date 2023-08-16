@@ -1,4 +1,5 @@
 class Api::V1::WritersController < ApplicationController
+  before_action :authenticate, except: %i[ index ]
   before_action :set_writer, only: %i[ update show destroy ]
 
   rescue_from ActionController::UnpermittedParameters, with: :unpermitted_params_handler
