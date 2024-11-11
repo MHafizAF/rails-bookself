@@ -19,7 +19,7 @@ class Api::V1::SessionsController < ApplicationController
     if @user && @user.authenticate(session_params[:password])
       render_token({
         access: generate_token(@user.id, TOKEN_EXPIRATION[:access], ACCESS_TOKEN_SECRET),
-        refresh: generate_token(@user.id, TOKEN_EXPIRATION[:refresh] ,REFRESH_TOKEN_SECRET)
+        refresh: generate_token(@user.id, TOKEN_EXPIRATION[:refresh], REFRESH_TOKEN_SECRET)
       })
     else
       response_error("Invalid username or password", 422)
@@ -32,7 +32,7 @@ class Api::V1::SessionsController < ApplicationController
     if user_id
       render_token({
         access: generate_token(user_id[0]["user_id"], TOKEN_EXPIRATION[:access], ACCESS_TOKEN_SECRET),
-        refresh: generate_token(user_id[0]["user_id"], TOKEN_EXPIRATION[:refresh] ,REFRESH_TOKEN_SECRET)
+        refresh: generate_token(user_id[0]["user_id"], TOKEN_EXPIRATION[:refresh], REFRESH_TOKEN_SECRET)
       })
     else
       response_error("Invalid token", 400)
