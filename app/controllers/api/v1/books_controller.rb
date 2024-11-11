@@ -15,13 +15,13 @@ class Api::V1::BooksController < ApplicationController
 
   def create 
     @book = Book.new(book_params)
-    @book.save ? response_ok(@book, 200) : 
-                 response_error(@book.errors, 422)
+    @book.save ? response_ok(@book, 200) 
+      : response_error(@book.errors, 422)
   end
 
   def update 
-    @book.update(book_params) ? response_ok(@book, 200) :
-                                response_error(@book.errors, 422)
+    @book.update(book_params) ? response_ok(@book, 200) 
+      : response_error(@book.errors, 422)
   end
 
   def show 

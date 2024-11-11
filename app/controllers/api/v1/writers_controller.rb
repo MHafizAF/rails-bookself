@@ -11,13 +11,13 @@ class Api::V1::WritersController < ApplicationController
 
   def create 
     @writer = Writer.new(writer_params)
-    @writer.save ? response_ok(@writer, 200) : 
-                   response_error(@writer.errors, 422)
+    @writer.save ? response_ok(@writer, 200) 
+      : response_error(@writer.errors, 422)
   end
 
   def update 
-    @writer.update(writer_params) ? response_ok(@writer, 200) :
-                                    response_error(@writer.errors, 422)
+    @writer.update(writer_params) ? response_ok(@writer, 200) 
+      : response_error(@writer.errors, 422)
   end
 
   def show 

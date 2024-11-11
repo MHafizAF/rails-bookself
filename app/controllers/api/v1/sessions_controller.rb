@@ -5,8 +5,8 @@ class Api::V1::SessionsController < ApplicationController
   def signup 
     @user = User.new(session_params)
 
-    @user.save ? response_ok(@user, 200) :
-                 response_error(@user.errors, 422)
+    @user.save ? response_ok(@user, 200) 
+      : response_error(@user.errors, 422)
   end
 
   def signin 
