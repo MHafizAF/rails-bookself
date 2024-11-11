@@ -27,12 +27,12 @@ class Api::V1::SessionsController < ApplicationController
   end
 
   def refresh_token 
-    user_id = decode_user_data(params[:refresh_token], REFRESH_TOKEN_SECRET)
+    user = decode_user_data(params[:refresh_token], REFRESH_TOKEN_SECRET).first
 
-    if user_id
+    if user
       render_token({
-        access: generate_token(user_id[0]["user_id"], TOKEN_EXPIRATION[:access], ACCESS_TOKEN_SECRET),
-        refresh: generate_token(user_id[0]["user_id"], TOKEN_EXPIRATION[:refresh], REFRESH_TOKEN_SECRET)
+        access: generate_token(user["user_id"], TOKEN_EXPIRATION[:access], ACCESS_TOKEN_SECRET),
+        refresh: generate_token(user["user_id"], TOKEN_EXPIRATION[:refresh], REFRESH_TOKEN_SECRET)
       })
     else
       response_error("Invalid token", 400)

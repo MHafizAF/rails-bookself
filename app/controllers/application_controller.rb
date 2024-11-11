@@ -1,6 +1,9 @@
 class ApplicationController < ActionController::API
   ACCESS_TOKEN_SECRET  = ENV["ACCESS_TOKEN_SECRET"]
   REFRESH_TOKEN_SECRET = ENV["REFRESH_TOKEN_SECRET"]
+  ALGORITHM = 'HS256'.freeze
+  BEARER_FORMAT = /^Bearer /i.freeze
+
 
   def authenticate 
     decode_data = decode_user_data(request.headers["Authorization"], ACCESS_TOKEN_SECRET)
@@ -11,16 +14,15 @@ class ApplicationController < ActionController::API
   end
 
   def encode_user_data(payload, secret)
-    JWT.encode payload, secret, "HS256"
+    JWT.encode payload, secret, ALGORITHM
   end
 
   def decode_user_data(token_params, secret)
     if token_params
-      split_token = token_params.split(" ")
-      token       = split_token[0] != "Bearer" ? split_token[0] : split_token[1] 
+      token = extract_token(token_params)
       
       begin 
-        JWT.decode token, secret, true, { algorithm: "HS256" }
+        JWT.decode token, secret, true, { algorithm: ALGORITHM }
       rescue => errors 
         puts errors
       end
@@ -43,4 +45,16 @@ class ApplicationController < ActionController::API
       total_pages: data.total_pages
     }
   end
+
+  private 
+
+  def extract_token(token_param)
+    if token_param.match?(BEARER_FORMAT)
+      token_param.split(' ', 2).last
+    else
+      token_param
+    end
+  end
+
+
 end
