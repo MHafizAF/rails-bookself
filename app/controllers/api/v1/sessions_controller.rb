@@ -41,12 +41,12 @@ class Api::V1::SessionsController < ApplicationController
 
   def render_token tokens
     render json: {
-        message: "success",
-        data: {
-          access_token: tokens[:access], 
-          refresh_token: tokens[:refresh]
-        }
-      }, status: 201
+      message: "success",
+      data: {
+        access_token: tokens[:access], 
+        refresh_token: tokens[:refresh]
+      }
+    }, status: 201
   end
 
   def generate_token user_id, expiration, secret
