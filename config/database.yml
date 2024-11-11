@@ -7,7 +7,7 @@ pgsql: &pgsql
   password: <%= ENV['DB_PASSWORD'] %>
 
 defaults: &defaults
-  <<: *<%= ENV['DB'] || "pgsql" %>
+  <<: *pgsql
 
 development:
   <<: *defaults
